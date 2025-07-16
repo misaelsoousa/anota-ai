@@ -1,0 +1,9 @@
+@import './reset.css';
+@import "tailwindcss";
+
+@theme {
+    --color-main-gray: #343539;
+    --color-main-purple: #8D00A3;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
