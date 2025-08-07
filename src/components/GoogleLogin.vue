@@ -3,6 +3,7 @@
 </template>
 
 <script setup lang="ts">
+import { useIndexedDB } from '@/services/db';
 import { ref, onMounted } from 'vue';
 
 declare global {
@@ -13,7 +14,7 @@ declare global {
 
 const clientId = '1087252846940-sq6p28r78dbkru6bi97csmb4p4viukir.apps.googleusercontent.com';
 const googleBtn = ref<HTMLDivElement | null>(null);
-
+const { addUser} = useIndexedDB();
 onMounted(() => {
   if (window.google && googleBtn.value) {
     window.google.accounts.id.initialize({
@@ -37,6 +38,8 @@ onMounted(() => {
 function handleCredentialResponse(response: any) {
   const jwt = response.credential;
   const payload = JSON.parse(atob(jwt.split('.')[1]));
-  alert('Bem-vindo, ' + payload.name);
+  const nome = payload.name;
+  console.log(nome);
+  addUser({ nome: nome });
 }
 </script>

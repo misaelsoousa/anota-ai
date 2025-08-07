@@ -4,7 +4,11 @@ import IconLogin from '@/components/icons/IconLogin.vue';
 import { isLoading } from '@/loadingState';
 import ToogleTheme from '@/components/layout/ToogleTheme.vue';
 import GoogleLogin from '@/components/GoogleLogin.vue';
-
+import { onMounted, ref } from 'vue';
+import { useIndexedDB } from '@/services/db';
+import router from '@/router';
+const { openDB, addUser } = useIndexedDB();
+const nome = ref('')
 
 function loginAnonimo() {
   isLoading.value = true;
@@ -12,6 +16,14 @@ function loginAnonimo() {
     isLoading.value = false;
   }, 5000);
 }
+const login = () =>{
+    addUser({ nome: nome.value });
+    router.push('/');
+}
+
+onMounted (() => {
+  openDB();
+});
 
 </script>
 
@@ -27,7 +39,7 @@ function loginAnonimo() {
         <div class="xl:bg-[#FDFAFD] xl:dark:bg-[#36343B] transition duration-300 xl:h-screen flex justify-center items-center w-full">
           <ToogleTheme/>
             <div class="flex flex-col items-center gap-10 px-5 sm:px-20 w-full sm:w-[500px]">
-                <button class="bg-[#F7685C] hover:bg-[#c25248] hidden transition duration-300 cursor-pointer w-full text-white font-medium p-4 rounded-lg flex items-center justify-center gap-2">
+                <button class="bg-[#F7685C] hover:bg-[#c25248] transition duration-300 cursor-pointer w-full text-white font-medium p-4 rounded-lg flex items-center justify-center gap-2">
                     <IconGoogle/>
                    Entre com o Google
                 </button>
@@ -35,9 +47,9 @@ function loginAnonimo() {
                 <span class="relative before:w-1/6 sm:before:w-1/5 transition duration-300 before:transition before:duration-300 after:transition after:duration-300 before:h-[1px] dark:before:bg-white before:bg-black before:absolute before:top-3/5 before:left-0 before:-translate-y-1/2 after:w-1/6 sm:after:w-1/5 after:h-[1px] dark:after:bg-white after:bg-black after:absolute after:top-3/5 after:right-0 after:-translate-y-1/2 text-center w-full dark:text-white text-[#3F3D3F] my-4 leading-none align-middle">
                     ou junte-se anonimamente
                 </span>
-                <form action="" class="flex flex-col gap-10 w-full">
-                <input type="text" placeholder="Seu nome secreto" class="bg-white p-4 rounded-lg border-black border-2 w-full placeholder:text-black font-medium focus:outline-0 text-black">
-                <button @click="loginAnonimo" class="bg-main-purple hover:bg-[#650074] transition duration-300 cursor-pointer w-full text-white font-medium p-4 rounded-lg flex items-center justify-center gap-2">
+                <form action="" class="flex flex-col gap-10 w-full"  @submit.prevent="login">
+                <input type="text" v-model="nome" placeholder="Seu nome secreto" class="bg-white p-4 rounded-lg border-black border-2 w-full placeholder:text-black font-medium focus:outline-0 text-black">
+                <button class="bg-main-purple hover:bg-[#650074] transition duration-300 cursor-pointer w-full text-white font-medium p-4 rounded-lg flex items-center justify-center gap-2">
                     <IconLogin/>
                     Entre anonimamente</button>
                 </form>

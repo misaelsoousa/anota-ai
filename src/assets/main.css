@@ -3,8 +3,10 @@
 
 @theme {
     --color-light-gray: #3C3D43;
+    --color-gray: #E5E5E4;
     --color-main-gray: #343539;
     --color-main-purple: #8D00A3;
+    --color-dark-purple: #670077;
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
